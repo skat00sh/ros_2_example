@@ -1,0 +1,8 @@
+# Build and log directories
+log/*
+build/*
+install/*
+.vscode/*
+
+# Compiled files
+*.out
