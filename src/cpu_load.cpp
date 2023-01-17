@@ -24,6 +24,8 @@ bool get_cpu_times(size_t &idle_time, size_t &total_time) {
 int main(int, char *[]) {
     size_t previous_idle_time=0, previous_total_time=0;
     for (size_t idle_time, total_time; get_cpu_times(idle_time, total_time); sleep(1)) {
+        std::cout << "Idle_time : "<<idle_time << std::endl;
+        std::cout << "Previous_Idle_time : "<<previous_idle_time << std::endl;
         const float idle_time_delta = idle_time - previous_idle_time;
         const float total_time_delta = total_time - previous_total_time;
         const float utilization = 100.0 * (1.0 - idle_time_delta / total_time_delta);

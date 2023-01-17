@@ -14,9 +14,15 @@
 
 #include <chrono>
 #include <memory>
+#include <fstream>
+#include <iostream>
+#include <numeric>
+#include <unistd.h>
+#include <vector>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+// #include "cpu_load.h"
 
 using namespace std::chrono_literals;
 
@@ -26,19 +32,52 @@ using namespace std::chrono_literals;
 class MinimalPublisher : public rclcpp::Node
 {
 public:
+  size_t previous_idle_time=0; 
+  size_t previous_total_time=0;
   MinimalPublisher()
   : Node("minimal_publisher"), count_(0)
   {
     publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
     timer_ = this->create_wall_timer(
-      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      5000ms, std::bind(&MinimalPublisher::timer_callback, this));
+  }
+private:
+  bool get_cpu_times(size_t &idle_time, size_t &total_time) {
+    std::ifstream proc_stat("/proc/stat");
+    proc_stat.ignore(5, ' '); // Skip the 'cpu' prefix.
+    std::vector<size_t> cpu_times;
+    for (size_t time; proc_stat >> time; cpu_times.push_back(time));
+    if (cpu_times.size() < 4)
+        return false;
+    idle_time = cpu_times[3];
+    total_time = std::accumulate(cpu_times.begin(), cpu_times.end(), 0);
+    return true;
+  }
+  
+  private:
+  void write_to_file(std::string data){
+    std::ofstream outfile;
+
+    outfile.open("test.txt", std::ios_base::app); // open file in append mode
+    outfile << data << std::endl; 
   }
 
 private:
   void timer_callback()
   {
     auto message = std_msgs::msg::String();
-    message.data = "Hello, world! " + std::to_string(count_++);
+    size_t idle_time=0, total_time=0;
+    float utilization = 0.0;
+    // std::cout << idle_time << std::endl;
+    if(get_cpu_times(idle_time, total_time)){
+      const float idle_time_delta = idle_time - previous_idle_time;
+      const float total_time_delta = total_time - previous_total_time;
+      utilization = 100.0 * (1.0 - idle_time_delta / total_time_delta);
+      previous_idle_time = idle_time;
+      previous_total_time = total_time;
+    }
+    message.data = "CPU Utilization: " + std::to_string(utilization) + " %";
+    write_to_file(std::to_string(utilization));
     RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     publisher_->publish(message);
   }
