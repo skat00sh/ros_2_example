@@ -18,21 +18,14 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 
-RUN apt update && apt upgrade 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y ros-foxy-desktop
-RUN apt install ros-dev-tools
+RUN apt update && apt upgrade -y && DEBIAN_FRONTEND=noninteractive apt-get install -y ros-foxy-desktop python3-rosdep2
+RUN apt install -y ros-dev-tools
 
-# WORKDIR /root/dev_ws/src
-# # RUN git clone https://github.com/ros/ros_tutorials.git -b foxy-devel
-# WORKDIR /root/dev_ws
 
-# COPY ros2_entrypoint.sh /root/.
-# ENTRYPOINT ["/root/ros2_entrypoint.sh"]
-# CMD ["bash"]
-# COPY ./opt/ros/foxy/setup.bash .
 RUN echo "source /opt/ros/foxy/setup.bash" >> /root/.bashrc
-# ENTRYPOINT ["/bin/bash", "-c", "./setup.bash"]
-# RUN . /opt/ros/foxy/setup.sh
-# ENTRYPOINT [ "/bin/bash" , "-c", "ros2 run demo_nodes_cpp talker"]
-CMD ["ros2 run demo_nodes_cpp talker"}
-# RUN mkdir /home/ros_ws
+
+COPY . /home/ros_ws/
+WORKDIR /home/ros_ws
+
+RUN /bin/bash -c "source /opt/ros/foxy/setup.bash && colcon build --packages-select cpp_pubsub"
+ENTRYPOINT [ "/home/ros_ws/ros_entrypoint.sh" ]
