@@ -13,3 +13,8 @@ We use the ROS middleware for the communication of our individual software modul
 5. Write a shell script that loads the CPU enough to test your pipeline.
 
 As soon as you have finished the task , pack the Dockerfile, the ROS workspace and the scripts as an archive and send it to us. If you have any questions or something is not clearly formulated, just get in touch with us.
+
+
+```bash
+stress --cpu 2 --timeout 60
+```
