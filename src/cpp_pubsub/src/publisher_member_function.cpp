@@ -58,8 +58,9 @@ private:
   void write_to_file(std::string data){
     std::ofstream outfile;
 
-    outfile.open("test.txt", std::ios_base::app); // open file in append mode
+    outfile.open("./cpu_load.log", std::ios_base::app); // open file in append mode
     outfile << data << std::endl; 
+    outfile.close();
   }
 
 private:
