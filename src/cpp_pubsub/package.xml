@@ -3,7 +3,7 @@
 <package format="3">
   <name>cpp_pubsub</name>
   <version>0.0.0</version>
-  <description>ExMinimal publisher/subscriber for writingCPU load to file </description>
+  <description>Minimal publisher/subscriber for writing CPU load to file </description>
   <maintainer email="vyas.dev.ms@gmail.com">Dev</maintainer>
   <license>Apache License 2.0</license>
 

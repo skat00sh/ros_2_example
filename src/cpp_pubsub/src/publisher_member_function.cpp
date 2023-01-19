@@ -35,7 +35,7 @@ public:
   size_t previous_idle_time=0; 
   size_t previous_total_time=0;
   MinimalPublisher()
-  : Node("minimal_publisher"), count_(0)
+  : Node("Publisher"), count_(0)
   {
     publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
     timer_ = this->create_wall_timer(
@@ -77,7 +77,7 @@ private:
       previous_idle_time = idle_time;
       previous_total_time = total_time;
     }
-    message.data = "CPU Utilization: " + std::to_string(utilization) + " %";
+    message.data = "CPU Utilization: " + std::to_string(utilization) + "%";
     write_to_file(std::to_string(utilization));
     RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     publisher_->publish(message);
