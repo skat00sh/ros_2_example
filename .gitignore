@@ -6,3 +6,6 @@ install/*
 
 # Compiled files
 *.out
+
+# Log files
+*.log
