@@ -1,1 +1,1 @@
-docker run -it --rm --net=host -v "$(pwd):/home/ros_s" ros_2_foxy:latest
+docker run -it --rm --net=host -v "$(pwd):/home/ros_ws" ros_2_foxy:latest
