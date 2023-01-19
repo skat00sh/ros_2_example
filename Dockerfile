@@ -27,5 +27,4 @@ RUN echo "source /opt/ros/foxy/setup.bash" >> /root/.bashrc
 COPY . /home/ros_ws/
 WORKDIR /home/ros_ws
 
-RUN /bin/bash -c "source /opt/ros/foxy/setup.bash && colcon build --packages-select cpp_pubsub"
 ENTRYPOINT [ "/home/ros_ws/ros_entrypoint.sh" ]
