@@ -1,8 +1,5 @@
 version: "2.3"
-services: 
-  # build_image:
-  #   build: .
-  #   image: ros_2_foxy:latest
+services:
   talker:
     build: .
     image: ros_2_foxy:latest
@@ -12,6 +9,5 @@ services:
     network_mode: "host"
     stdin_open: true 
     tty: true
-    # command: /usr/bin/docker run -it --rm --net=host -v "$(pwd):/home/ros_ws" ros_2_foxy:latest
-    # image: ros_2_foxy:latest
+
 
