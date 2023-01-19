@@ -63,6 +63,8 @@ watch -n 10 ./read_log.sh
 ```bash
 stress --cpu 2 --timeout 60
 ```
+This what it should look like:
+![](sample_run.png)
 4. Once you're done, don't forget to use:
 ```bash
 docker compose down
